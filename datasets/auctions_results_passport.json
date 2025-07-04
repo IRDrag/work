@@ -1,0 +1,20 @@
+{
+    "identifier": "auction-results-v1",
+    "title": "Результаты аукционов на право заключения охотхозяйственных соглашений",
+    "description": "Набор содержит информацию о проведенных аукционах, включая извещения, документацию и итоговые протоколы по каждому охотничьему угодью.",
+    "owner": { "name": "Служба по охране и использованию объектов животного мира Иркутской области", "email": "fauna@govirk.ru" },
+    "created": "2025-07-03",
+    "modified": "2025-07-03",
+    "subject": "Предпринимательство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/auctions_results_data.json",
+        "structure": [
+            { "title": "hunting_ground", "description": "Наименование охотничьего угодья" },
+            { "title": "notice_url", "description": "Ссылка на извещение о проведении аукциона" },
+            { "title": "documentation_url", "description": "Ссылка на аукционную документацию" },
+            { "title": "protocol_url", "description": "Ссылка на итоговый протокол аукциона" }
+        ]
+    },
+    "version": "1.0"
+}

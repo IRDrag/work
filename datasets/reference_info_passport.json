@@ -1,0 +1,18 @@
+{
+    "identifier": "reference-info-v1",
+    "title": "Справочная информация для получателей государственных услуг",
+    "description": "Набор содержит вспомогательную информацию для охотников и граждан: графики приема, реквизиты для уплаты пошлин и сборов, памятки.",
+    "owner": { "name": "Служба по охране и использованию объектов животного мира Иркутской области", "email": "fauna@govirk.ru" },
+    "created": "2025-07-03",
+    "modified": "2025-07-03",
+    "subject": "Государство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/reference_info_data.json",
+        "structure": [
+            { "title": "title", "description": "Наименование справочного документа" },
+            { "title": "url", "description": "Прямая ссылка на файл документа" }
+        ]
+    },
+    "version": "1.0"
+}

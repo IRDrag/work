@@ -1,0 +1,18 @@
+{
+    "identifier": "seasons-and-limits-v1",
+    "title": "Сроки, лимиты и нормы добычи охотничьих ресурсов",
+    "description": "Набор содержит приказы службы и указы Губернатора Иркутской области, устанавливающие сроки охоты, лимиты и нормы добычи охотничьих ресурсов на территории региона.",
+    "owner": { "name": "Служба по охране и использованию объектов животного мира Иркутской области", "email": "fauna@govirk.ru" },
+    "created": "2025-07-03",
+    "modified": "2025-07-03",
+    "subject": "Природа и экология",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/seasons_and_limits_data.json",
+        "structure": [
+            { "title": "title", "description": "Наименование нормативного документа" },
+            { "title": "url", "description": "Прямая ссылка на файл документа" }
+        ]
+    },
+    "version": "1.0"
+}

@@ -1,0 +1,18 @@
+{
+    "identifier": "forms-and-templates-v1",
+    "title": "Формы заявлений для получения государственных услуг",
+    "description": "Набор содержит актуальные формы и образцы заявлений, согласий и других документов, необходимых для подачи в службу по охране и использованию объектов животного мира Иркутской области.",
+    "owner": { "name": "Служба по охране и использованию объектов животного мира Иркутской области", "email": "fauna@govirk.ru" },
+    "created": "2025-07-03",
+    "modified": "2025-07-03",
+    "subject": "Государство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/forms_data.json",
+        "structure": [
+            { "title": "title", "description": "Наименование формы или документа" },
+            { "title": "url", "description": "Прямая ссылка на файл документа" }
+        ]
+    },
+    "version": "1.0"
+}

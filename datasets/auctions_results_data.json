@@ -1,0 +1,20 @@
+[
+    {
+        "hunting_ground": "Тегур",
+        "notice_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/Извещение о проведении аукциона ТЕГУР.pdf",
+        "documentation_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/Аукционная документация ТЕГУР.pdf",
+        "protocol_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/протокол аукциона.pdf"
+    },
+    {
+        "hunting_ground": "Верхнебирюсинский",
+        "notice_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/2. Извещение Верхнебирюсинскийй.pdf",
+        "documentation_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/3. Документация Верхнебирюсинский.pdf",
+        "protocol_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/Протокол аукциона Верхнебирюсинский.pdf"
+    },
+    {
+        "hunting_ground": "Бирюсинский",
+        "notice_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/1. Извещение Бирюсинский.pdf",
+        "documentation_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/2. Документация Бирюсинский.pdf",
+        "protocol_url": "https://irkobl.ru/sites/ozm/pred_gos_usl/zak_oh_sogl/Протокол аукциона .pdf"
+    }
+]

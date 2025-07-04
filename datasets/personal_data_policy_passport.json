@@ -1,0 +1,27 @@
+{
+    "identifier": "personal-data-policy-v1",
+    "title": "Политика в отношении обработки персональных данных",
+    "description": "Официальный документ, определяющий политику Службы в отношении сбора, хранения, обработки и защиты персональных данных граждан и сотрудников.",
+    "owner": {
+        "name": "Служба по охране и использованию объектов животного мира Иркутской области",
+        "email": "fauna@govirk.ru"
+    },
+    "created": "2025-07-04",
+    "modified": "2025-07-04",
+    "subject": "Государство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/personal_data_policy_data.json",
+        "structure": [
+            {
+                "title": "title",
+                "description": "Наименование документа"
+            },
+            {
+                "title": "url",
+                "description": "Прямая ссылка на файл документа"
+            }
+        ]
+    },
+    "version": "1.0"
+}

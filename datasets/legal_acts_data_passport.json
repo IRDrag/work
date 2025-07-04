@@ -1,0 +1,27 @@
+{
+    "identifier": "legal-acts-v1",
+    "title": "Правовые акты службы по охране и использованию объектов животного мира Иркутской области",
+    "description": "Перечень нормативных правовых актов, изданных службой, с наименованиями и прямыми ссылками на тексты документов.",
+    "owner": {
+        "name": "Служба по охране и использованию объектов животного мира Иркутской области",
+        "email": "fauna@govirk.ru"
+    },
+    "created": "2025-07-03",
+    "modified": "2025-07-03",
+    "subject": "Государство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/legal_acts_data.json",
+        "structure": [
+            {
+                "title": "title",
+                "description": "Полное наименование правового акта"
+            },
+            {
+                "title": "url",
+                "description": "Прямая ссылка на документ"
+            }
+        ]
+    },
+    "version": "1.0"
+}

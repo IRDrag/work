@@ -1,0 +1,23 @@
+{
+    "identifier": "eia-materials-v1",
+    "title": "Материалы по общественным обсуждениям (ОВОС)",
+    "description": "Набор содержит материалы по оценке воздействия на окружающую среду, включая уведомления, проекты лимитов и квот добычи охотничьих ресурсов, выносимые на общественное обсуждение, сгруппированные по годам.",
+    "owner": {
+        "name": "Служба по охране и использованию объектов животного мира Иркутской области",
+        "email": "fauna@govirk.ru"
+    },
+    "created": "2025-07-03",
+    "modified": "2025-07-04",
+    "subject": "Природа и экология",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/04_07_eia_materials_data.json",
+        "structure": [
+            { "title": "project_year", "description": "Период, к которому относятся материалы (например, 2025-2026)" },
+            { "title": "documents", "description": "Список документов по проекту" },
+            { "title": "documents.title", "description": "Наименование конкретного документа" },
+            { "title": "documents.url", "description": "Прямая ссылка на файл документа" }
+        ]
+    },
+    "version": "1.0"
+}

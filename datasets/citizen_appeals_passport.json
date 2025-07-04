@@ -1,0 +1,27 @@
+{
+    "identifier": "citizen-appeals-v1",
+    "title": "Работа с обращениями граждан",
+    "description": "Набор содержит Порядок организации работы с обращениями граждан, а также ежегодные статистические данные о количестве и характере обращений в службу.",
+    "owner": {
+        "name": "Служба по охране и использованию объектов животного мира Иркутской области",
+        "email": "fauna@govirk.ru"
+    },
+    "created": "2025-07-04",
+    "modified": "2025-07-04",
+    "subject": "Государство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/citizen_appeals_data.json",
+        "structure": [
+            {
+                "title": "title",
+                "description": "Наименование документа (приказ или статистический отчет)"
+            },
+            {
+                "title": "url",
+                "description": "Прямая ссылка на файл документа"
+            }
+        ]
+    },
+    "version": "1.0"
+}

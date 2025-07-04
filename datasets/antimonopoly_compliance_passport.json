@@ -1,0 +1,27 @@
+{
+    "identifier": "antimonopoly-compliance-v1",
+    "title": "Материалы по антимонопольному комплаенсу",
+    "description": "Набор содержит распоряжения об организации системы антимонопольного комплаенса в службе, а также ежегодные доклады о ее функционировании.",
+    "owner": {
+        "name": "Служба по охране и использованию объектов животного мира Иркутской области",
+        "email": "fauna@govirk.ru"
+    },
+    "created": "2025-07-04",
+    "modified": "2025-07-04",
+    "subject": "Предпринимательство",
+    "data": {
+        "format": "json",
+        "hyperlink": "https://irkobl.ru/sites/ozm/otkrytyye_dannyye/json/antimonopoly_compliance_data.json",
+        "structure": [
+            {
+                "title": "title",
+                "description": "Наименование документа"
+            },
+            {
+                "title": "url",
+                "description": "Прямая ссылка на файл документа"
+            }
+        ]
+    },
+    "version": "1.0"
+}
