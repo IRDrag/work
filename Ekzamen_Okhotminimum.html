@@ -67,6 +67,7 @@
     </style>
 </head>
 <body onload="checkForSavedTest()">
+
     <div id="timer"></div>
     <div id="progress-indicator"></div>
     <div class="container">
@@ -74,6 +75,7 @@
             <h2 id="mainTitle">Экзамен по знанию охотминиума</h2>
             <button onclick="initiateTest()">Начать</button>
         </div>
+
         <div id="setup" style="display:none;">
             <p id="timeWarning"></p>
             <div class="input-group">
@@ -88,10 +90,13 @@
             </div>
             <button onclick="startTest()">Начать тест</button>
         </div>
+
         <div id="quiz" style="display:none;"></div>
         <button id="submitBtn" style="display:none;" onclick="showResults(null)">Завершить экзамен</button>
+
         <div id="results" style="display:none;"></div>
     </div>
+    
     <div id="log-modal">
         <div id="log-container">
             <span class="close-btn" onclick="closeLog()">&times;</span>
@@ -100,6 +105,7 @@
             <div id="log-table-container"></div>
         </div>
     </div>
+
 <script>
     const QUESTIONS_TO_SHOW = 100;
     const TIME_FOR_TEST_MINUTES = 100;
@@ -606,11 +612,15 @@
             correct: "не более 3 охотников"
         }
     ];
+    questionBank.forEach(q => {
+        q.correct = simpleHash(q.correct.trim());
+    });
     const effectiveQuestionsInTest = Math.min(QUESTIONS_TO_SHOW, questionBank.length);
     let timerInterval = null;
 
     document.addEventListener('contextmenu', event => event.preventDefault());
     window.onbeforeunload = e => localStorage.getItem('testInProgress') ? "Вы уверены, что хотите покинуть страницу?" : undefined;
+    
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('userName').addEventListener('input', e => clearError(e.target));
         document.getElementById('userPassport').addEventListener('input', e => clearError(e.target));
@@ -629,42 +639,19 @@
         });
     });
 
-    function checkForSavedTest() {
-        if (localStorage.getItem('testInProgress')) {
-            const state = JSON.parse(localStorage.getItem('quizState'));
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('setup').style.display = 'none';
-            renderQuiz(state.selectedQuestions, state.userAnswers);
-            startTimer(state.endTime);
+    function checkForSavedTest() { if (localStorage.getItem('testInProgress')) { const state = JSON.parse(localStorage.getItem('quizState')); document.getElementById('startScreen').style.display = 'none'; document.getElementById('setup').style.display = 'none'; renderQuiz(state.selectedQuestions, state.userAnswers); startTimer(state.endTime); } }
+    function initiateTest() { document.documentElement.requestFullscreen().catch(err => console.log(`Fullscreen error: ${err.message}`)); document.getElementById('startScreen').style.display = 'none'; document.getElementById('setup').style.display = 'block'; document.getElementById('timeWarning').innerText = `Внимание! На прохождение теста отводится ${TIME_FOR_TEST_MINUTES} минут.`; }
+    function showError(inputElement, message) { const errorElement = document.getElementById(inputElement.id + 'Error'); inputElement.classList.add('input-error'); errorElement.textContent = message; errorElement.style.display = 'block'; }
+    function clearError(inputElement) { const errorElement = document.getElementById(inputElement.id + 'Error'); inputElement.classList.remove('input-error'); errorElement.style.display = 'none'; }
+    function shuffle(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+    function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            hash |= 0; // Convert to 32bit integer
         }
-    }
-
-    function initiateTest() {
-        document.documentElement.requestFullscreen().catch(err => console.log(`Fullscreen error: ${err.message}`));
-        document.getElementById('startScreen').style.display = 'none';
-        document.getElementById('setup').style.display = 'block';
-        document.getElementById('timeWarning').innerText = `Внимание! На прохождение теста отводится ${TIME_FOR_TEST_MINUTES} минут.`;
-    }
-    
-    function showError(inputElement, message) {
-        const errorElement = document.getElementById(inputElement.id + 'Error');
-        inputElement.classList.add('input-error');
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-    }
-
-    function clearError(inputElement) {
-        const errorElement = document.getElementById(inputElement.id + 'Error');
-        inputElement.classList.remove('input-error');
-        errorElement.style.display = 'none';
-    }
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+        return (hash >>> 0).toString(16);
     }
 
     function startTest() {
@@ -674,12 +661,8 @@
         clearError(userNameInput); clearError(userPassportInput);
         const namePattern = /^[А-Яа-яЁё\s,-]+$/;
         const passportPattern = /^\d{4}\s\d{6}$/;
-        if (!namePattern.test(userNameInput.value) || userNameInput.value.trim() === "") {
-            showError(userNameInput, userNameInput.title); isValid = false;
-        }
-        if (!passportPattern.test(userPassportInput.value)) {
-            showError(userPassportInput, userPassportInput.title); isValid = false;
-        }
+        if (!namePattern.test(userNameInput.value) || userNameInput.value.trim() === "") { showError(userNameInput, userNameInput.title); isValid = false; }
+        if (!passportPattern.test(userPassportInput.value)) { showError(userPassportInput, userPassportInput.title); isValid = false; }
         if (!isValid) return;
         const userName = userNameInput.value.trim();
         const userPassport = userPassportInput.value.trim();
@@ -713,150 +696,47 @@
         updateProgress();
     }
     
-    function updateProgress() {
-        const state = getQuizState();
-        if (!state) return;
-        const answeredCount = Object.keys(state.userAnswers).length;
-        document.getElementById('progress-indicator').innerText = `Отвечено: ${answeredCount} из ${effectiveQuestionsInTest}`;
-        document.getElementById('progress-indicator').style.display = 'block';
-    }
-
-    function saveAnswer(questionIndex, answerValue) {
-        const state = getQuizState();
-        state.userAnswers[questionIndex] = answerValue;
-        localStorage.setItem('quizState', JSON.stringify(state));
-        updateProgress();
-    }
-
-    function startTimer(endTime) {
-        const timerEl = document.getElementById('timer');
-        timerEl.style.display = 'block';
-        function updateTimer() {
-            const remaining = endTime - Date.now();
-            if (remaining <= 0) {
-                clearInterval(timerInterval);
-                timerEl.innerHTML = "Время вышло!";
-                showResults(null);
-                return;
-            }
-            const minutes = Math.floor((remaining / 1000) / 60);
-            const seconds = Math.floor((remaining / 1000) % 60);
-            timerEl.innerHTML = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-        updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
-    }
-
-    function getQuizState() {
-        return JSON.parse(localStorage.getItem('quizState'));
-    }
+    function updateProgress() { const state = getQuizState(); if (!state) return; const answeredCount = Object.keys(state.userAnswers).length; document.getElementById('progress-indicator').innerText = `Отвечено: ${answeredCount} из ${effectiveQuestionsInTest}`; document.getElementById('progress-indicator').style.display = 'block'; }
+    function saveAnswer(questionIndex, answerValue) { const state = getQuizState(); state.userAnswers[questionIndex] = answerValue; localStorage.setItem('quizState', JSON.stringify(state)); updateProgress(); }
+    function startTimer(endTime) { const timerEl = document.getElementById('timer'); timerEl.style.display = 'block'; function updateTimer() { const remaining = endTime - Date.now(); if (remaining <= 0) { clearInterval(timerInterval); timerEl.innerHTML = "Время вышло!"; showResults(null); return; } const minutes = Math.floor((remaining / 1000) / 60); const seconds = Math.floor((remaining / 1000) % 60); timerEl.innerHTML = `${minutes}:${seconds.toString().padStart(2, '0')}`; } updateTimer(); timerInterval = setInterval(updateTimer, 1000); }
+    function getQuizState() { return JSON.parse(localStorage.getItem('quizState')); }
 
     function showResults(archivedState) {
         if (timerInterval) clearInterval(timerInterval);
         ['timer', 'progress-indicator'].forEach(id => document.getElementById(id).style.display = 'none');
         const state = archivedState || getQuizState();
         if (!state) return;
-        let score = 0; let errorHTML = '';
+        
+        let score = 0; 
+        let errorHTML = '';
         state.selectedQuestions.forEach((q, index) => {
             const userAnswer = state.userAnswers[index];
-            if (userAnswer === q.correct) {
+            if (userAnswer && simpleHash(userAnswer) === q.correct) {
                 score++;
             } else {
-                errorHTML += `<div class="error-item"><h4>${q.question}</h4><p>Ваш ответ: <span class="user-answer-wrong">${userAnswer || "нет ответа"}</span></p><p>Правильный ответ: <span class="correct-answer">${q.correct}</span></p></div>`;
+                const correctAnswerText = q.options.find(opt => simpleHash(opt) === q.correct) || "Ответ не найден";
+                errorHTML += `<div class="error-item"><h4>${q.question}</h4><p>Ваш ответ: <span class="user-answer-wrong">${userAnswer || "нет ответа"}</span></p><p>Правильный ответ: <span class="correct-answer">${correctAnswerText}</span></p></div>`;
             }
         });
+
         const isPassed = (score / state.selectedQuestions.length) * 100 >= PASS_PERCENTAGE;
         const passStatus = isPassed ? "СДАН" : "НЕ СДАН";
         const statusClass = isPassed ? "pass" : "fail";
         const dateString = new Date(state.id).toLocaleString('ru-RU');
         const resultsContainer = document.getElementById('results');
-        resultsContainer.innerHTML = `
-            <div id="protocol-header">
-                <h2>Протокол проверки знаний</h2>
-                <div class="protocol-line"><span>Экзаменуемый:</span><span>${state.userName}</span></div>
-                <div class="protocol-line"><span>Паспортные данные:</span><span>${state.userPassport}</span></div>
-                <div class="protocol-line"><span>Дата проведения:</span><span>${dateString}</span></div>
-                <div class="protocol-line"><span>Количество правильных ответов:</span><span>${score} из ${state.selectedQuestions.length}</span></div>
-                <div class="protocol-verdict"><h3 class="${statusClass}">РЕЗУЛЬТАТ: ${passStatus}</h3></div>
-            </div>
-            <div id="screen-only-content">
-                <hr><p>Количество правильных ответов: ${score} из ${state.selectedQuestions.length}</p>
-                ${errorHTML ? `<button id="reviewBtn" class="secondary-button" onclick="toggleErrors()">Показать мои ошибки</button><div id="errorReview" style="display:none;"><h3>Разбор ошибок</h3>${errorHTML}</div>` : '<p>Все ответы верны!</p>'}
-                <hr><div><button onclick="window.print()">Печать / Сохранить как PDF</button></div>
-                <span class="help-toggle" onclick="toggleHelp()">Как распечатать или сохранить файл?</span>
-                <div id="saveHelpText" style="display:none;"><h4>Инструкция:</h4><ol><li>Нажмите кнопку "Печать / Сохранить как PDF".</li><li>В окне "Принтер" выберите ваш принтер или опцию <strong>"Сохранить как PDF"</strong>.</li><li>Нажмите "Печать" или "Сохранить".</li></ol></div>
-                ${archivedState ? `<br><button class="secondary-button" onclick="showLog()">Назад к журналу</button>` : ''}
-            </div>`;
+        resultsContainer.innerHTML = `<div id="protocol-header"><h2>Протокол проверки знаний</h2><div class="protocol-line"><span>Экзаменуемый:</span><span>${state.userName}</span></div><div class="protocol-line"><span>Паспортные данные:</span><span>${state.userPassport}</span></div><div class="protocol-line"><span>Дата проведения:</span><span>${dateString}</span></div><div class="protocol-line"><span>Количество правильных ответов:</span><span>${score} из ${state.selectedQuestions.length}</span></div><div class="protocol-verdict"><h3 class="${statusClass}">РЕЗУЛЬТАТ: ${passStatus}</h3></div></div><div id="screen-only-content"><hr><p>Количество правильных ответов: ${score} из ${state.selectedQuestions.length}</p>${errorHTML ? `<button id="reviewBtn" class="secondary-button" onclick="toggleErrors()">Показать мои ошибки</button><div id="errorReview" style="display:none;"><h3>Разбор ошибок</h3>${errorHTML}</div>` : '<p>Все ответы верны!</p>'}<hr><div><button onclick="window.print()">Печать / Сохранить как PDF</button></div><span class="help-toggle" onclick="toggleHelp()">Как распечатать или сохранить файл?</span><div id="saveHelpText" style="display:none;"><h4>Инструкция:</h4><ol><li>Нажмите кнопку "Печать / Сохранить как PDF".</li><li>В окне "Принтер" выберите ваш принтер или опцию <strong>"Сохранить как PDF"</strong>.</li><li>Нажмите "Печать" или "Сохранить".</li></ol></div>${archivedState ? `<br><button class="secondary-button" onclick="showLog()">Назад к журналу</button>` : ''}</div>`;
         ['quiz', 'submitBtn', 'startScreen'].forEach(id => document.getElementById(id).style.display = 'none');
         resultsContainer.style.display = 'block';
-        if (!archivedState) {
-            saveResultToLog(state);
-            localStorage.removeItem('quizState');
-            localStorage.removeItem('testInProgress');
-            window.onbeforeunload = null;
-        }
+        if (!archivedState) { saveResultToLog(state); localStorage.removeItem('quizState'); localStorage.removeItem('testInProgress'); window.onbeforeunload = null; }
     }
     
-    function saveResultToLog(state) {
-        let log = JSON.parse(localStorage.getItem('resultsLog') || '[]');
-        log.unshift(state);
-        if (log.length > 50) log = log.slice(0, 50);
-        localStorage.setItem('resultsLog', JSON.stringify(log));
-    }
-
-    function showLog() {
-        const log = JSON.parse(localStorage.getItem('resultsLog') || '[]');
-        const tableContainer = document.getElementById('log-table-container');
-        if (log.length === 0) {
-            tableContainer.innerHTML = "<p>Журнал пуст.</p>";
-        } else {
-            let tableHTML = `<table id="log-table"><tr><th>Дата</th><th>ФИО</th><th>Результат</th><th>Действие</th></tr>`;
-            log.forEach(item => {
-                const date = new Date(item.id).toLocaleString('ru-RU');
-                const score = Object.values(item.userAnswers).filter((ans, i) => ans === item.selectedQuestions[i].correct).length;
-                const isPassed = (score / item.selectedQuestions.length) * 100 >= PASS_PERCENTAGE;
-                tableHTML += `<tr><td>${date}</td><td>${item.userName}</td><td>${isPassed ? 'Сдан' : 'Не сдан'}</td><td><button onclick="recreateResult(${item.id})">Просмотр</button></td></tr>`;
-            });
-            tableHTML += `</table>`;
-            tableContainer.innerHTML = tableHTML;
-        }
-        document.getElementById('log-modal').style.display = 'flex';
-        if (document.fullscreenElement) document.exitFullscreen();
-    }
-
-    function closeLog() {
-        document.getElementById('log-modal').style.display = 'none';
-        if (document.getElementById('results').style.display !== 'block') {
-            location.reload();
-        }
-    }
-
-    function recreateResult(id) {
-        const log = JSON.parse(localStorage.getItem('resultsLog') || '[]');
-        const resultToShow = log.find(item => item.id === id);
-        if (resultToShow) {
-            document.getElementById('log-modal').style.display = 'none';
-            document.getElementById('startScreen').style.display = 'none';
-            showResults(resultToShow);
-        }
-    }
-
-    function toggleHelp() {
-        const helpDiv = document.getElementById('saveHelpText');
-        helpDiv.style.display = helpDiv.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function toggleErrors() {
-        const errorDiv = document.getElementById('errorReview');
-        const reviewBtn = document.getElementById('reviewBtn');
-        if (errorDiv.style.display === 'none') {
-            errorDiv.style.display = 'block';
-            reviewBtn.innerText = "Скрыть ошибки";
-        } else {
-            errorDiv.style.display = 'none';
-            reviewBtn.innerText = "Показать мои ошибки";
-        }
-    }
+    function saveResultToLog(state) { let log = JSON.parse(localStorage.getItem('resultsLog') || '[]'); log.unshift(state); if (log.length > 50) log = log.slice(0, 50); localStorage.setItem('resultsLog', JSON.stringify(log)); }
+    function showLog() { const log = JSON.parse(localStorage.getItem('resultsLog') || '[]'); const tableContainer = document.getElementById('log-table-container'); if (log.length === 0) { tableContainer.innerHTML = "<p>Журнал пуст.</p>"; } else { let tableHTML = `<table id="log-table"><tr><th>Дата</th><th>ФИО</th><th>Результат</th><th>Действие</th></tr>`; log.forEach(item => { const date = new Date(item.id).toLocaleString('ru-RU'); const score = Object.values(item.userAnswers).filter((ans, i) => simpleHash(ans) === item.selectedQuestions[i].correct).length; const isPassed = (score / item.selectedQuestions.length) * 100 >= PASS_PERCENTAGE; tableHTML += `<tr><td>${date}</td><td>${item.userName}</td><td>${isPassed ? 'Сдан' : 'Не сдан'}</td><td><button onclick="recreateResult(${item.id})">Просмотр</button></td></tr>`; }); tableHTML += `</table>`; tableContainer.innerHTML = tableHTML; } document.getElementById('log-modal').style.display = 'flex'; if (document.fullscreenElement) document.exitFullscreen(); }
+    function closeLog() { document.getElementById('log-modal').style.display = 'none'; if (document.getElementById('results').style.display !== 'block') { location.reload(); } }
+    function recreateResult(id) { const log = JSON.parse(localStorage.getItem('resultsLog') || '[]'); const resultToShow = log.find(item => item.id === id); if (resultToShow) { document.getElementById('log-modal').style.display = 'none'; document.getElementById('startScreen').style.display = 'none'; showResults(resultToShow); } }
+    function toggleHelp() { const helpDiv = document.getElementById('saveHelpText'); helpDiv.style.display = helpDiv.style.display === 'none' ? 'block' : 'none'; }
+    function toggleErrors() { const errorDiv = document.getElementById('errorReview'); const reviewBtn = document.getElementById('reviewBtn'); if (errorDiv.style.display === 'none') { errorDiv.style.display = 'block'; reviewBtn.innerText = "Скрыть ошибки"; } else { errorDiv.style.display = 'none'; reviewBtn.innerText = "Показать мои ошибки"; } }
 </script>
+
 </body>
 </html>
